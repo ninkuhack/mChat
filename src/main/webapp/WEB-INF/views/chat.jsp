@@ -33,13 +33,18 @@
     </div>
     <div class="row">
         <div class="col-xs-4">
-            <h4>Participants [{{participants.length}}]</h4>
+            <h4>Participants [10]</h4>
             <div class="share">
                 <ul ng-repeat="participant in participants">
                     <li>
-                        <span class="input-icon fui-new" ng-show="participant.typing"></span>
+                        <%--<span class="input-icon fui-new" ng-show="participant.typing"></span>--%>
                         <span class="input-icon fui-user" ng-show="!participant.typing"></span>
-                        <a href="" ng-click="privateSending(participant.username)">{{participant.username}}</a>
+                        <a href="" ng-click="privateSending(participant.username)">minh</a>
+                    </li>
+                    <li>
+                            <%--<span class="input-icon fui-new" ng-show="participant.typing"></span>--%>
+                        <span class="input-icon fui-user" ng-show="!participant.typing"></span>
+                        <a href="" ng-click="privateSending(participant.username)">minh</a>
                     </li>
                 </ul>
             </div>
@@ -47,7 +52,7 @@
         <div class="col-xs-8 chat-box">
             <h4>Messages</h4>
             <div ng-repeat="message in messages">
-                <small print-message></small>
+                <small print-message>fsdfsdfsd</small>
             </div>
         </div>
     </div>
@@ -60,6 +65,67 @@
 </div>
 </c:if>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="${contextPath}/resources/js/stomp.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+<script>
+    //Create stomp client over sockJS protocol
+    var socket = new SockJS("/ws");
+    var stompClient = Stomp.over(socket);
+
+    // Render price data from server into HTML, registered as callback
+    // when subscribing to price topic
+    function renderPrice(frame) {
+        var prices = JSON.parse(frame.body);
+        $('#price').empty();
+        for(var i in prices) {
+            var price = prices[i];
+            $('#price').append(
+                    $('<tr>').append(
+                            $('<td>').html(price.code),
+                            $('<td>').html(price.price.toFixed(2)),
+                            $('<td>').html(price.timeStr)
+                    )
+            );
+        }
+    }
+
+    // Callback function to be called when stomp client is connected to server
+    var connectCallback = function() {
+        stompClient.subscribe('/topic/price', renderPrice);
+        stompClient.send('/app/newConnect');
+    };
+
+    // Callback function to be called when stomp client could not connect to server
+    var errorCallback = function(error) {
+        alert(error.headers.message);
+    };
+
+    // Connect to server via websocket
+    stompClient.connect("guest", "guest", connectCallback, errorCallback);
+
+
+    // Register handler for add button
+    $(document).ready(function() {
+
+        $('.add').click(function(e){
+            e.preventDefault();
+            var code = $('.new .code').val();
+            var price = Number($('.new .price').val());
+            var jsonstr = JSON.stringify({ 'code': code, 'price': price });
+            stompClient.send("/app/addStock", {}, jsonstr);
+            return false;
+        });
+    });
+
+    // Register handler for remove all button
+    $(document).ready(function() {
+        $('.remove-all').click(function(e) {
+            e.preventDefault();
+            stompClient.send("/app/removeAllStocks");
+            return false;
+        });
+    });
+</script>
 </body>
 </html>
