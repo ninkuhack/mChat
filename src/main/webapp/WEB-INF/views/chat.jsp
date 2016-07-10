@@ -15,16 +15,18 @@
     <link href="${contextPath}/resources/css/chat.css" rel="stylesheet">
 </head>
 <body>
-
+<c:if test="${pageContext.request.userPrincipal.name != null}">
+    <form id="logoutForm" method="POST" action="${contextPath}/logout">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    </form>
 <div class="container">
 
     <div class="row">
         <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
             <div class="collapse navbar-collapse" id="navbar-collapse-01">
-                <h1>Spring WebSocket Chat</h1>
+                <h1>mChat Web Application</h1>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="websocket" target="_blank">Stats</a></li>
-                    <li><a href="logout">Logout ({{username}})</a></li>
+                    <li><a onclick="document.forms['logoutForm'].submit()" href="#">Logout (${pageContext.request.userPrincipal.name})</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav><!-- /navbar -->
@@ -38,7 +40,6 @@
                         <span class="input-icon fui-new" ng-show="participant.typing"></span>
                         <span class="input-icon fui-user" ng-show="!participant.typing"></span>
                         <a href="" ng-click="privateSending(participant.username)">{{participant.username}}</a>
-
                     </li>
                 </ul>
             </div>
@@ -57,7 +58,7 @@
         </div>
     </div>
 </div>
-
+</c:if>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
