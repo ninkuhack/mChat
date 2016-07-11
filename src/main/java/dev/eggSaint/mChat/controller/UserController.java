@@ -1,16 +1,25 @@
 package dev.eggSaint.mChat.controller;
 
 import dev.eggSaint.mChat.model.User;
+import dev.eggSaint.mChat.model.UserChat;
+import dev.eggSaint.mChat.service.ChatService;
 import dev.eggSaint.mChat.service.SecurityService;
 import dev.eggSaint.mChat.service.UserService;
 import dev.eggSaint.mChat.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -22,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private ChatService chatService;
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -39,7 +51,6 @@ public class UserController {
         }
 
         userService.save(userForm);
-
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
 
         return "redirect:/chat";
@@ -56,8 +67,20 @@ public class UserController {
         return "login";
     }
 
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response, Principal principal) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+            UserChat userChat = new UserChat();
+            userChat.setName(principal.getName());
+            chatService.removeUserChat(userChat);
+        }
+        return "redirect:/login?logout";
+    }
+
     @RequestMapping(value = {"/", "/chat"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
+    public String chat(Model model) {
         return "chat";
     }
 }

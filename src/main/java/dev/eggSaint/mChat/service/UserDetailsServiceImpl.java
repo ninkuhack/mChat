@@ -2,6 +2,7 @@ package dev.eggSaint.mChat.service;
 
 import dev.eggSaint.mChat.model.Role;
 import dev.eggSaint.mChat.model.User;
+import dev.eggSaint.mChat.model.UserChat;
 import dev.eggSaint.mChat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,8 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService{
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ChatService chatService;
 
     @Override
     @Transactional(readOnly = true)
@@ -28,6 +31,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
+        UserChat userChat = new UserChat();
+        userChat.setName(username);
+        chatService.addNewUserChat(userChat);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }

@@ -17,11 +17,12 @@
     <context:component-scan base-package="dev.eggSaint.mChat.*"/>
 
     <context:property-placeholder location="classpath:properties/application.properties"/>
-    <websocket:message-broker application-destination-prefix="/app">
-        <websocket:stomp-endpoint path="/ws">
+
+    <websocket:message-broker application-destination-prefix="/chat">
+        <websocket:stomp-endpoint path="/stomp">
             <websocket:sockjs/>
         </websocket:stomp-endpoint>
-        <websocket:simple-broker prefix="/topic"/>
+        <websocket:simple-broker prefix="/userChat"/>
     </websocket:message-broker>
 
 </beans>
