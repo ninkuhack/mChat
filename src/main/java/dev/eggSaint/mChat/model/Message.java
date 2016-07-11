@@ -6,14 +6,14 @@ import java.util.Date;
 public class Message implements Serializable {
   private static final long serialVersionUID = 1L;
   private String content;
-  private String contentOwn;
-  private String contentDes;
+  private String sender;
+  private String receiver;
   private Date time;
 
   public Message() {
     this.content = "";
-    this.contentOwn = "";
-    this.contentDes = "";
+    this.sender = "";
+    this.receiver = "";
     this.time = new Date();
   }
 
@@ -25,20 +25,20 @@ public class Message implements Serializable {
     this.content = content;
   }
 
-  public String getContentOwn() {
-    return contentOwn;
+  public String getSender() {
+    return sender;
   }
 
-  public void setContentOwn(String contentOwn) {
-    this.contentOwn = contentOwn;
+  public void setSender(String sender) {
+    this.sender = sender;
   }
 
-  public String getContentDes() {
-    return contentDes;
+  public String getReceiver() {
+    return receiver;
   }
 
-  public void setContentDes(String contentDes) {
-    this.contentDes = contentDes;
+  public void setReceiver(String receiver) {
+    this.receiver = receiver;
   }
 
   public Date getTime() {
@@ -53,8 +53,8 @@ public class Message implements Serializable {
   public String toString() {
     final StringBuffer sb = new StringBuffer("Message{");
     sb.append("content='").append(content).append('\'');
-    sb.append(", contentOwn='").append(contentOwn).append('\'');
-    sb.append(", contentDes='").append(contentDes).append('\'');
+    sb.append(", sender='").append(sender).append('\'');
+    sb.append(", receiver='").append(receiver).append('\'');
     sb.append(", time=").append(time);
     sb.append('}');
     return sb.toString();

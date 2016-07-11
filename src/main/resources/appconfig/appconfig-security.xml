@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http auto-config="true">
+        <intercept-url pattern="/resources/**" access="permitAll"/>
         <intercept-url pattern="/" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/chat" access="hasRole('ROLE_USER')"/>
         <intercept-url pattern="/chat/**" access="hasRole('ROLE_USER')"/>

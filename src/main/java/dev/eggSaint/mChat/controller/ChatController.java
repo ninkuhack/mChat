@@ -17,21 +17,17 @@ import java.util.Set;
  */
 @Controller
 public class ChatController {
-
     @Autowired
     ChatService chatService;
-    private Set<UserChat> listUserChat = new LinkedHashSet<>();
-    private List<Message> messages = new ArrayList<>();
 
-    @MessageMapping("/addMessage")
+    @MessageMapping("/sendMessage")
     public void addMessage(Message message) throws Exception {
-        messages.add(message);
-        chatService.updatePriceAndBroadcast();
+        chatService.sendMessageToClients(message);
     }
 
     @MessageMapping("/newConnect")
     public void newConnect() {
-        chatService.updatePriceAndBroadcast();
+        chatService.sendListUserToClients();
     }
 
 }

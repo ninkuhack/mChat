@@ -26,7 +26,7 @@
             <div class="collapse navbar-collapse" id="navbar-collapse-01">
                 <h1>mChat Web Application</h1>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="<c:url value="/logout" />">Logout (${pageContext.request.userPrincipal.name})</a></li>
+                    <li><a href="<c:url value="/logout" />">Logout (<span id="myUsername">${pageContext.request.userPrincipal.name}</span>)</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav><!-- /navbar -->
@@ -36,32 +36,27 @@
             <h4>Participants [<span id="numberOfUser"></span>]</h4>
             <div class="share">
                 <ul id="listUser">
-                    <li>
-                        <%--<span class="input-icon fui-new" ng-show="participant.typing"></span>--%>
-                        <span class="input-icon fui-user" ng-show="!participant.typing"></span>
-                        <a href="" ng-click="privateSending(participant.username)">minh</a>
-                    </li>
+
                 </ul>
             </div>
         </div>
         <div class="col-xs-8 chat-box">
             <h4>Messages</h4>
-            <div ng-repeat="message in messages">
-                <small print-message>fsdfsdfsd</small>
+            <div id="chatContent">
             </div>
         </div>
     </div>
     <div class="row footer-chat-box">
         <div class="form-group">
-            <span><small>You will send this message to <strong>{{sendTo}}</strong> (click a participant name to send a private message)</small></span>
-            <input id="newMessageInput" type="text" class="form-control" placeholder="Write your message and hit enter..." ng-model="newMessage" ng-keyup="$event.keyCode == 13 ? sendMessage() : startTyping()"/>
+            @<span id="destination"></span>
+            <input id="newMessageInput" type="text" class="form-control" placeholder="Write your message and hit enter..."/>
         </div>
     </div>
 </div>
 </c:if>
-<script src="${contextPath}/resources/js/stomp.js"></script>
-<script src="${contextPath}/resources/js/sockjs-0.3.min.js"></script>
 <script src="${contextPath}/resources/js/jquery-2.1.1.js"></script>
+<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+<script src="${contextPath}/resources/js/stomp.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 <script src="${contextPath}/resources/js/chat.js"></script>
 </body>

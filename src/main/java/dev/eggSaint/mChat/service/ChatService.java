@@ -1,5 +1,6 @@
 package dev.eggSaint.mChat.service;
 
+import dev.eggSaint.mChat.model.Message;
 import dev.eggSaint.mChat.model.UserChat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,15 +20,25 @@ public class ChatService {
 
     public void addNewUserChat(UserChat userChat){
         listUserChat.add(userChat);
-        updatePriceAndBroadcast();
+        sendListUserToClients();
     }
 
     public void removeUserChat(UserChat userChat){
         listUserChat.remove(userChat);
-        updatePriceAndBroadcast();
+        sendListUserToClients();
     }
 
-    public void updatePriceAndBroadcast() {
+    public void sendListUserToClients() {
         template.convertAndSend("/userChat/user", listUserChat);
     }
+
+    public void sendMessageToClients(Message message){
+        System.out.println("message = " + message);
+        if("All".equals(message.getReceiver())){
+            template.convertAndSend("/userChat/messageAll", message);
+        } else {
+            template.convertAndSend("/userChat/message-" + message.getReceiver(), message);
+        }
+    }
+
 }
