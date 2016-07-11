@@ -6,9 +6,6 @@ var ChatApp = function(){
     this.socket = new SockJS("/stomp");
     this.stompClient = Stomp.over(this.socket);
     this.connectServer();
-    $( window ).unload(function() {
-        this.stompClient.send('/logout');
-    });
 }
 ChatApp.prototype = {
     connectServer: function(){

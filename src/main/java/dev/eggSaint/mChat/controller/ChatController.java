@@ -1,6 +1,6 @@
 package dev.eggSaint.mChat.controller;
 
-import dev.eggSaint.mChat.model.Stock;
+import dev.eggSaint.mChat.model.Message;
 import dev.eggSaint.mChat.model.UserChat;
 import dev.eggSaint.mChat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,38 +20,12 @@ public class ChatController {
 
     @Autowired
     ChatService chatService;
-//    private TaskScheduler scheduler = new ConcurrentTaskScheduler();
     private Set<UserChat> listUserChat = new LinkedHashSet<>();
-    private List<Stock> messages = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
 
-    /**
-     * Invoked after bean creation is complete, this method will schedule
-     * updatePriceAndBroacast every 1 second
-     */
-//  @PostConstruct
-//  private void broadcastTimePeriodically() {
-//    scheduler.scheduleAtFixedRate(new Runnable() {
-//      @Override public void run() {
-//        updatePriceAndBroadcast();
-//      }
-//    }, 10000);
-//  }
-
-    /**
-     * Handler to add one stock
-     */
-    @MessageMapping("/addStock")
-    public void addStock(Stock stock) throws Exception {
-        messages.add(stock);
-        chatService.updatePriceAndBroadcast();
-    }
-
-    /**
-     * Handler to remove all stocks
-     */
-    @MessageMapping("/removeAllStocks")
-    public void removeAllStocks() {
-        messages.clear();
+    @MessageMapping("/addMessage")
+    public void addMessage(Message message) throws Exception {
+        messages.add(message);
         chatService.updatePriceAndBroadcast();
     }
 
