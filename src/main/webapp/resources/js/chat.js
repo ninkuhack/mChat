@@ -61,7 +61,7 @@ ChatApp.prototype = {
             return;
         }
         if(receiver!="All"){
-            $('#chatContent').append("<div class='" + receiver + "'><small><strong style='color:#f5901e;'>Me : </strong>"
+            $('#chatContent').append("<div class='content " + receiver + "'><small><strong style='color:#f5901e;'>Me : </strong>"
                 + content + "</small></div>");
         }
         var jsonData = JSON.stringify({ 'content': content, 'sender': myUsername, 'receiver': receiver});
